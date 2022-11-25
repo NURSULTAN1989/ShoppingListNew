@@ -13,7 +13,9 @@ import kotlin.math.log
 
 class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>() {
     var count = 0
-    var onLongClickListener: OnLongClick? = null
+    var onLongClickListener:((ShopItem)->Unit)? = null
+    var onClickListener:((ShopItem)->Unit)? = null
+
     var shopList = listOf<ShopItem>()
         set(value) {
             field = value
@@ -37,7 +39,11 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
         holder.tvName.text = shopItem.name
         holder.tvCount.text = shopItem.count.toString()
         holder.view.setOnLongClickListener {
-            onLongClickListener?.onLongClick(shopItem)
+            onLongClickListener?.invoke(shopItem)
+            true
+        }
+        holder.view.setOnClickListener {
+            onClickListener?.invoke(shopItem)
             true
         }
     }
@@ -59,11 +65,6 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
         val tvName = view.findViewById<TextView>(R.id.tv_name)
         val tvCount = view.findViewById<TextView>(R.id.tv_count)
     }
-
-    interface OnLongClick {
-        fun onLongClick(shopItem: ShopItem)
-    }
-
     companion object {
         const val VIEW_TYPE_ENABLED = 1
         const val VIEW_TYPE_DISABLED = 0

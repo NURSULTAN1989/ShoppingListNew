@@ -11,7 +11,7 @@ class MainViewModel : ViewModel() {
     private val getShopListUseCase = GetShopListUseCase(repository)
     private val addShopItemUseCase = AddShopItemUseCase(repository)
     private val editShopItemUseCase = EditShopItemUseCase(repository)
-    private val getShopItemUseCase = GetShopItemUseCase(repository)
+    private val deletShopItemUseCase = DeletShopItemUseCase(repository)
 
     val shopList=getShopListUseCase.getShopList()
 
@@ -21,7 +21,9 @@ class MainViewModel : ViewModel() {
     fun changeEnabledShopItem(shopItem: ShopItem){
         val newItem=shopItem.copy(enabled = !shopItem.enabled)
         editShopItemUseCase.editShopItem(newItem)
-
+    }
+    fun deletShopItem(shopItem: ShopItem){
+        deletShopItemUseCase.deleteShopItem(shopItem)
     }
 
 }
