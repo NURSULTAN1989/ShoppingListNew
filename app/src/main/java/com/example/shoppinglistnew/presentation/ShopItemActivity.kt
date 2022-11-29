@@ -8,7 +8,7 @@ import com.example.shoppinglistnew.R
 import com.example.shoppinglistnew.domain.ShopItem
 
 class ShopItemActivity : AppCompatActivity() {
-    private var screenMode = ShopItemActivity.MODE_UNKNOWN
+    private var screenMode = MODE_UNKNOWN
     private var shopItemId = ShopItem.UNDEFINED_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,20 +32,20 @@ class ShopItemActivity : AppCompatActivity() {
     }
 
     private fun parseIntent() {
-        if (!intent.hasExtra(ShopItemActivity.EXTRA_SCREEN_MODE)) {
+        if (!intent.hasExtra(EXTRA_SCREEN_MODE)) {
             throw RuntimeException("Param screen mode is absent")
         }
-        val mode = intent.getStringExtra(ShopItemActivity.EXTRA_SCREEN_MODE)
-        if (mode != ShopItemActivity.MODE_EDIT && mode != ShopItemActivity.MODE_ADD) {
+        val mode = intent.getStringExtra(EXTRA_SCREEN_MODE)
+        if (mode != MODE_EDIT && mode != MODE_ADD) {
             throw RuntimeException("Unknown screen mode $mode")
         }
         screenMode = mode
-        if (screenMode == ShopItemActivity.MODE_EDIT) {
-            if (!intent.hasExtra(ShopItemActivity.EXTRA_SHOP_ITEM_ID)) {
+        if (screenMode == MODE_EDIT) {
+            if (!intent.hasExtra(EXTRA_SHOP_ITEM_ID)) {
                 throw RuntimeException("Param shop item id  is absent ")
             }
             shopItemId =
-                intent.getIntExtra(ShopItemActivity.EXTRA_SHOP_ITEM_ID, ShopItem.UNDEFINED_ID)
+                intent.getIntExtra(EXTRA_SHOP_ITEM_ID, ShopItem.UNDEFINED_ID)
         }
     }
 
