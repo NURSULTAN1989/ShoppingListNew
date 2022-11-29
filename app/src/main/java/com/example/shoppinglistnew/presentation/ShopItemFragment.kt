@@ -1,34 +1,29 @@
 package com.example.shoppinglistnew.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.shoppinglistnew.R
 import com.example.shoppinglistnew.databinding.FragmentShopItemBinding
 import com.example.shoppinglistnew.domain.ShopItem
-import com.google.android.material.textfield.TextInputLayout
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ShopItemFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class ShopItemFragment : Fragment() {
     private lateinit var binding: FragmentShopItemBinding
     private lateinit var shopItemViewModel: ShopItemViewModel
-    private var screenMode = ShopItemActivity.MODE_UNKNOWN
+    private var screenMode = MODE_UNKNOWN
     private var shopItemId = ShopItem.UNDEFINED_ID
+    private lateinit var onEditingFinishedListener: OnEditingFinishedListener
 
 
 
@@ -52,6 +47,15 @@ class ShopItemFragment : Fragment() {
         observeViewModel()
         launchRightMode()
 
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnEditingFinishedListener){
+            onEditingFinishedListener=context
+        }else{
+            throw RuntimeException("Activity must implement OnEditingFinishListener")
+        }
     }
 
     private fun observeViewModel() {
@@ -134,7 +138,7 @@ class ShopItemFragment : Fragment() {
                 binding.etCount.text?.toString())
         }
         shopItemViewModel.closeWindow.observe(viewLifecycleOwner) {
-            activity?.onBackPressed()
+            onEditingFinishedListener.onEditingFinished()
         }
     }
 
@@ -144,8 +148,11 @@ class ShopItemFragment : Fragment() {
                 binding.etCount.text?.toString())
         }
         shopItemViewModel.closeWindow.observe(viewLifecycleOwner) {
-            activity?.onBackPressed()
+            onEditingFinishedListener.onEditingFinished()
         }
+    }
+    interface OnEditingFinishedListener{
+        fun onEditingFinished()
     }
 
 
